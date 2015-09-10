@@ -19,7 +19,10 @@ Name: <%= name %>
 Version: <%= version %>
 Release: <%= iteration %><%= dist_tag %>
 Summary:  <%= description.split("\n").first.empty? ? "_" : description.split("\n").first %>
+<% # wrlinux will not build an RPM with this in the spec %>
+<% if platform_family != 'wrlinux' -%>
 BuildArch: <%= architecture %>
+<% end -%>
 AutoReqProv: no
 BuildRoot: %buildroot
 Prefix: /

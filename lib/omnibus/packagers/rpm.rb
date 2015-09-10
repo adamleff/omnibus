@@ -287,6 +287,7 @@ module Omnibus
           config_files:   config_files,
           files:          files,
           build_dir:      build_dir,
+          platform:       Omnibus::Metadata.platform_shortname
         }
       )
     end
@@ -478,7 +479,13 @@ module Omnibus
       #   http://rpm.org/ticket/56
       #
       if version =~ /\-/
-        converted = version.gsub('-', '~')
+        # This will be updated to use a chef-sugar matcher #wrlinux?
+        # once sethvargo/chef-sugar#116 is available in a release.
+        if Ohai['platform_family'] == 'wrlinux'
+          converted = version.gsub('-', '_') #WRL has an elderly RPM version
+        else
+          converted = version.gsub('-', '~')
+        end
 
         log.warn(log_key) do
           "Tildes hold special significance in the RPM package versions. " \
