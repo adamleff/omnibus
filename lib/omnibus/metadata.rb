@@ -141,7 +141,9 @@ module Omnibus
       #   the platform family short name
       #
       def platform_shortname
-        if rhel?
+        if amazon_linux?
+          Ohai['platform']
+        elsif rhel?
           'el'
         elsif suse?
           'sles'
@@ -166,6 +168,9 @@ module Omnibus
       #
       def truncate_platform_version(platform_version, platform)
         case platform
+        when 'amazon'
+          # Amazon Linux versions are YYYY.MM and will work fine for us, even though it's a rolling release
+          platform_version
         when 'centos', 'debian', 'el', 'fedora', 'freebsd', 'omnios', 'pidora', 'raspbian', 'rhel', 'sles', 'suse', 'smartos', 'nexus', 'ios_xr'
           # Only want MAJOR (e.g. Debian 7, OmniOS r151006, SmartOS 20120809T221258Z)
           platform_version.split('.').first
